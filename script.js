@@ -5,6 +5,17 @@ function handleFormSubmit(event) {
     email: event.target.email.value,
     phone: event.target.phone.value,
   };
+  axios.get("https://crudcrud.com/api/f4bf52fddbb048ddb13514c505b609aa/appointmentData",userDetails)
+        .then((response) =>{
+            console.log(response)
+            for (var i = 0; i < response.data.length; i++) {
+                showNewUserOnScreen(response.data[i])
+            }
+            })
+    
+        .catch ((error) => {
+            console.log(error)
+    })
   axios
     .post(
       "https://crudcrud.com/api/f4bf52fddbb048ddb13514c505b609aa/appointmentData",
@@ -12,12 +23,58 @@ function handleFormSubmit(event) {
     )
     .then((response) => displayUserOnScreen(response.data))
     .catch((error) => console.log(error));
+    axios
+    .delete("https://crudcrud.com/api/f4bf52fddbb048ddb13514c505b609aa/appointmentData/698788c79a4cac03e8a335a8",
+        userDetails
+    )
+    .then((response) => {
+      console.log(response)
+    .catch((error) => console.log(error));
+   });
+   axios
+    .post(
+      "https://crudcrud.com/api/f4bf52fddbb048ddb13514c505b609aa/appointmentData",
+      userDetails
+    )
+    .then((response) => {
+      showUserOnScreen(response.data);
+    })
+    .catch((err) => console.log(err));
+
+
+    axios
+        .post("https://crudcrud.com/api/KEY/appointmentData", userDetails)
+        .then((response) => {
+            showUserOnScreen(response.data)
+        })
+        .catch((error) => 
+            console.log(error)
+        )
+
+  
+}
+function editUser(userId, username, email, phone) {
+    document.getElementById("username").value = username;
+    document.getElementById("email").value = email;
+    document.getElementById("phone").value = phone;
+    axios
+        .delete(`https://crudcrud.com/api/KEY/appointmentData/${userId}`)
+        .then(() => {
+            removeUserFromScreen(userId);
+
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+}
+
+
 
   // Clearing the input fields
   document.getElementById("username").value = "";
   document.getElementById("email").value = "";
   document.getElementById("phone").value = "";
-}
+
 
 function displayUserOnScreen(userDetails) {
   const userItem = document.createElement("li");
